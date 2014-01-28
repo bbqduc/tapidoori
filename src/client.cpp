@@ -1,21 +1,53 @@
 #include <SFML/Network.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include <iostream>
+
+#ifdef __linux__
+	#include <X11/Xlib.h>
+#endif
+
+static void InitTapiDoor()
+{
+	#ifdef __linux__
+		XInitThreads();
+	#endif
+}
+
+void render(sf::RenderWindow *window)
+{
+	while(window->isOpen())
+	{
+		window->display();
+	}
+}
 
 int main()
 {
-	sf::UdpSocket sock;
+	InitTapiDoor();
 
-	std::string str("Hello, I'm Client!");
+	sf::RenderWindow window(sf::VideoMode(800,600), "tapidoori");
+	window.setActive(false);
 
-	sf::Socket::Status sendStatus = sock.send(&str[0], str.length(), sf::IpAddress("127.0.0.1"), 53000);
-	if(sendStatus == sf::Socket::Done)
+	sf::Thread thread(&render, &window);
+	thread.launch();
+
+	while(window.isOpen())
 	{
-		std::cout << "Jipii!" << std::endl;
+		sf::Event event;
+		while(window.pollEvent(event))
+		{
+			switch(event.type)
+			{
+				case sf::Event::Closed:
+				{
+					window.close();
+					break;
+				}
+				default: break;
+			}
+		}
 	}
-	else
-	{
-		std::cout << "Oh noes" << std::endl;
-	}
-
+	thread.wait();
 	return 0;
 }
