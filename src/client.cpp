@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <iostream>
+#include "packets.h"
 
 #ifdef __linux__
 	#include <X11/Xlib.h>
@@ -49,5 +50,15 @@ int main()
 		}
 	}
 	thread.wait();
+
+	sf::Packet p;
+	MessagePacket mp; mp.msg="Hello world";
+	p << mp;
+
+	TestPacket tp;
+	tp.a=1; tp.b=2; tp.c="Hello TestPacket";
+	p << tp;
+
+	PacketParser::Parse(p);
 	return 0;
 }

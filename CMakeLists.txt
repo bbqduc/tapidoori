@@ -4,7 +4,7 @@ project(tapidoori)
 find_package(SFML REQUIRED)
 
 add_executable(server src/server.cpp)
-add_executable(client src/client.cpp)
+add_executable(client src/client.cpp src/packets.cpp)
 
 target_link_libraries(server sfml-network)
 if(CMAKE_COMPILER_IS_GNUCXX)
