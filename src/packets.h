@@ -9,12 +9,7 @@ enum PacketType
 	Test
 };
 
-class ParsablePacket
-{
-	virtual void HandlePacket(void *data)=0;
-};
-
-struct MessagePacket : public ParsablePacket
+struct MessagePacket
 {
 	std::string msg;
 
@@ -23,7 +18,7 @@ struct MessagePacket : public ParsablePacket
 	friend sf::Packet& operator<<(sf::Packet &lhs, const MessagePacket &rhs);
 };
 
-struct TestPacket : public ParsablePacket
+struct TestPacket
 {
 	int a, b;
 	std::string c;
