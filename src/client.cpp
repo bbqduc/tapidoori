@@ -30,7 +30,6 @@ int main()
 	sfg::SFGUI sfgui;
 
 	sf::RenderWindow window(sf::VideoMode(800,600), "tapidoori");
-	window.setActive(false);
 
 	auto label = sfg::Label::Create("Hello world!");
 
@@ -45,8 +44,6 @@ int main()
 	
 	window.resetGLStates();
 
-	sf::Thread thread(&render, &window);
-	thread.launch();
 	sf::Clock clock;
 
 	while(window.isOpen())
@@ -54,7 +51,8 @@ int main()
 		sf::Event event;
 		while(window.pollEvent(event))
 		{
-			desktop.HandleEvent(event);
+            auto label = sfg::Label::Create("Halloota");
+            box->Pack(label);
 			switch(event.type)
 			{
 				case sf::Event::Closed:
@@ -72,16 +70,6 @@ int main()
 		sfgui.Display(window);
 		window.display();
 	}
-	thread.wait();
 
-	sf::Packet p;
-	MessagePacket mp; mp.msg="Hello world";
-	p << mp;
-
-	TestPacket tp;
-	tp.a=1; tp.b=2; tp.c="Hello TestPacket";
-	p << tp;
-
-	PacketParser::Parse(p);
 	return 0;
 }

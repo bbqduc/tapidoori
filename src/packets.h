@@ -5,27 +5,40 @@
 
 enum PacketType
 {
-	Message,
-	Test
+    Connect, // Packet coming to server from client connect
+    Disconnect, // Packet coming to server from client disconnect
+	ServerChatMessage, // Packet coming to server from client chatmessage
+	ClientChatMessage, // Packet coming to client about chatmessage
+    SystemMessage, // Packet coming to client about general system message
 };
 
-struct MessagePacket
+enum SystemMessageType
+{
+    NewConnection,
+    PlayerDisconnect
+};
+
+struct ConnectPacket
+{
+    std::string playername;
+
+	friend sf::Packet& operator>>(sf::Packet &lhs, ConnectPacket &rhs);
+	friend sf::Packet& operator<<(sf::Packet &lhs, const ConnectPacket &rhs);
+};
+
+struct ServerChatMessagePacket
 {
 	std::string msg;
 
 	void HandlePacket(void *data);
-	friend sf::Packet& operator>>(sf::Packet &lhs, MessagePacket &rhs);
-	friend sf::Packet& operator<<(sf::Packet &lhs, const MessagePacket &rhs);
+	friend sf::Packet& operator>>(sf::Packet &lhs, ServerChatMessagePacket &rhs);
+	friend sf::Packet& operator<<(sf::Packet &lhs, const ServerChatMessagePacket &rhs);
 };
 
-struct TestPacket
+struct ClientChatMessagePacket
 {
-	int a, b;
-	std::string c;
-
-	void HandlePacket(void *data);
-	friend sf::Packet& operator>>(sf::Packet &lhs, TestPacket &rhs);
-	friend sf::Packet& operator<<(sf::Packet &lhs, const TestPacket &rhs);
+    unsigned clientId;
+    std::string msg;
 };
 
 struct PacketParser

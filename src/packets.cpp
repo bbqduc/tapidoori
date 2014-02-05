@@ -2,7 +2,7 @@
 #include <SFML/System.hpp>
 #include <iostream>
 
-sf::Packet& operator>>(sf::Packet &lhs, MessagePacket &rhs)
+/*sf::Packet& operator>>(sf::Packet &lhs, MessagePacket &rhs)
 {
 	return lhs >> rhs.msg;
 }
@@ -57,4 +57,4 @@ void PacketParser::Parse(sf::Packet &p)
 			case Test: HandlePacket<TestPacket>(p); break;
 		}
 	}
-}
+}*/
