@@ -6,7 +6,7 @@ find_package(SFML REQUIRED)
 add_executable(server src/server.cpp)
 add_executable(client src/client.cpp src/packets.cpp)
 
-target_link_libraries(server sfml-network)
+target_link_libraries(server sfml-network sfml-system)
 if(CMAKE_COMPILER_IS_GNUCXX)
 	add_definitions(-std=c++11 -g3)
 endif()

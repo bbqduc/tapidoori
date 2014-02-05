@@ -7,10 +7,19 @@
 
 struct ClientInfo
 {
-//    sf::IpAddress m_Address;
-    sf::TcpSocket m_TcpSocket;
+    sf::IpAddress m_Address;
+    sf::TcpSocket *m_TcpSocket;
     std::string m_Name;
 
+	ClientInfo():m_TcpSocket(new sf::TcpSocket()) {}
+	~ClientInfo() { delete m_TcpSocket; }
+
+	ClientInfo(const ClientInfo& c)
+	{
+		m_TcpSocket = new sf::TcpSocket();
+		m_Name = c.m_Name;
+		m_Address = c.m_Address;
+	}
 };
 
 class TapidooriServer

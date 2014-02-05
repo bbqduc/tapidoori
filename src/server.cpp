@@ -4,43 +4,47 @@
 
 void TapidooriServer::PollForNewClient()
 {
-    ClientInfo& c = clients.back();
+	ClientInfo& c = clients.back();
 
-    sf::Socket::Status status = m_TcpListener.accept(c.m_TcpSocket);
-    if(status == sf::Socket::Done)
-    {
-        // new client connection !
-        c.m_Name = "Herkko";
-        ClientInfo newc;
-        clients.push_back(newc); // make a new empty client
-        unsigned newclientid = clients.size();
-        HandleNewClient(newclientid);
-    }
+	sf::Socket::Status status = m_TcpListener.accept(*c.m_TcpSocket);
+	if(status == sf::Socket::Done)
+	{
+		unsigned newclientid = clients.size()-1;
+		// new client connection !
+		c.m_Name = "Herkko";
+		clients.push_back(ClientInfo()); // make a new empty client
+		HandleNewClient(newclientid);
+	}
 }
 
 TapidooriServer::TapidooriServer(unsigned short port)
 {
-    m_TcpListener.listen(port);
-    m_TcpListener.setBlocking(false);
-    std::cout << "Listening to TCP on port " << port << std::endl; // todo : some proper logging thing
+	clients.push_back(ClientInfo()); // make a new empty client
+	m_TcpListener.listen(port);
+	m_TcpListener.setBlocking(false);
+	std::cout << "Listening to TCP on port " << port << std::endl; // todo : some proper logging thing
 }
 
 void TapidooriServer::HandleNewClient(unsigned id)
 {
-    std::cout << "Got new client with id " << id << '\n';
-    // broadcast system message of join
-    // respond to new client with stuff
+	std::cout << "Got new client with id " << id << '\n';
+	// broadcast system message of join
+	// respond to new client with stuff
 }
 
 void TapidooriServer::Run()
 {
-    PollForNewClient();
-//    sf::Sleep(1);
+	while(true) // todo : stop condition
+	{
+		PollForNewClient();
+		sf::sleep(sf::seconds(1));
+	}
 }
 
 int main()
 {
-    TapidooriServer server(53000);
+	TapidooriServer server(53000);
+	server.Run();
 
 	return 0;
 }
